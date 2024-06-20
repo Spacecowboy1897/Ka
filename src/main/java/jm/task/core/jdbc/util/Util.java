@@ -13,17 +13,19 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
-    private Util() {
-    }
-
     // реализуйте настройку соеденения с БД
     private static SessionFactory sessionFactory;
+    private static Connection connection;
     private static final String URL = "jdbc:mysql://localhost:3306/mydbtest";
     private static final String USERNAME = "admin";
     private static final String PASSWORD = "123456";
 
+    private Util() {
+    }
+
+
     public static Connection getConnection() {
-        Connection connection = null;
+        connection = null;
 
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -33,7 +35,7 @@ public class Util {
         return connection;
     }
 
-    public static void closeConnection(Connection connection) {
+    public static void closeConnection() {
         try {
             if (connection != null) {
                 connection.close();

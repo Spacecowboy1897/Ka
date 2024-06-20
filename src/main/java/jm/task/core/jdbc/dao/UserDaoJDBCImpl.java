@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Connection connection = Util.getConnection();
+    private final Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
 
@@ -50,7 +50,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         String sql = "INSERT INTO users (NAME, LASTNAME, AGE) VALUES(?, ?, ?)";
 
-        try ( PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             //preStat.setLong(1, 1);
             preparedStatement.setString(1, name);
@@ -61,7 +61,11 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("User was added!");
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -77,7 +81,11 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("User was removed!");
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -116,7 +124,11 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("Table was cleaned!");
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
